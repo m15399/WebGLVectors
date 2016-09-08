@@ -1,0 +1,48 @@
+<html>
+<body>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+
+        attribute vec3 vPos;
+        attribute float progress;
+
+        varying float drawTime;
+
+        uniform mat4 PVMatrix;
+        uniform mat4 MMatrix;
+        uniform float time;
+
+        void main(void) {
+            drawTime = (-(time * 6.0) + progress * 1.0);
+            gl_Position = PVMatrix * MMatrix * vec4(vPos, 1.0);
+
+        }
+
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+
+        precision highp float;
+
+        varying float drawTime;
+
+        void main(void) {
+            float modTime = drawTime - floor(drawTime);
+            float minus = 1.0 - modTime;
+            float lengthened = 1.0 - pow(minus, .3);
+            float b = clamp(lengthened + .6, 0.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, b);
+        }
+
+    </script>
+
+    <script src="gl-matrix-min.js"></script>
+    <script src="view.js"></script>
+    <script src="gl.js"></script>
+    <script src="shaders.js"></script>
+    <script src="line.js"></script>
+    <script src="main.js"></script>
+
+
+</body>
+</html>
