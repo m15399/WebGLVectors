@@ -17,7 +17,7 @@ var Shapes = {};
         var l = quickline;
         vec3.set(l.loc, x + dx/2, y + dy/2, 0);
         l.rot = angle / Math.PI * 180;
-        vec3.set(l.scale, len, .02, 1);
+        vec3.set(l.scale, len, l.scale[1], l.scale[2]);
 
         l.Draw();
     }

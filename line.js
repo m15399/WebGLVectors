@@ -1,7 +1,10 @@
 
-var Line = {};
+var Line = (function(){
 
-Line.Create = (function(){
+    var _Line = {};
+
+    _Line.lineWidth = .03;
+
     var proto = {};
 
     proto.shaderName = 'shader';
@@ -17,6 +20,17 @@ Line.Create = (function(){
     ];
     var vertices32 = new Float32Array(vertices);
 
+    _Line.Create = function(){
+        var o = Object.create(proto);
+
+        o.loc = vec3.fromValues(0, 0, 0);
+        o.rot = 0;
+        o.scale = vec3.fromValues(1, 1, 1);
+
+        o.InitBuffers();
+        return o;
+    }
+
     proto.InitBuffers = function(){
         this.vbo = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
@@ -28,7 +42,12 @@ Line.Create = (function(){
 
         mat4.translate(MMatrix, MMatrix, this.loc);
         mat4.rotateZ(MMatrix, MMatrix, glMatrix.toRadian(this.rot));
-        mat4.scale(MMatrix, MMatrix, this.scale);
+
+        var newScale = vec3.fromValues(
+            this.scale[0], this.scale[1] * Line.lineWidth, this.scale[2]
+        );
+
+        mat4.scale(MMatrix, MMatrix, newScale);
 
         var prog = GetShader(this.shaderName);
 
@@ -49,15 +68,5 @@ Line.Create = (function(){
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
-    return function(){
-        var o = Object.create(proto);
-
-        o.loc = vec3.create();
-        o.rot = 0;
-        o.scale = vec3.create();
-        vec3.set(o.scale, 1, .02, 1);
-
-        o.InitBuffers();
-        return o;
-    }
+    return _Line;
 })();

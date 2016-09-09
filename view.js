@@ -2,14 +2,9 @@
 var View = (function(){
     var o = {};
 
-    o.eye = vec3.create();
-    vec3.set(o.eye, 0, 0, 10);
-
-    o.center = vec3.create();
-    vec3.set(o.center, 0, 0, 0);
-
-    o.up = vec3.create();
-    vec3.set(o.up, 0, 1, 0);
+    o.eye = vec3.fromValues(0, 0, 10);
+    o.center = vec3.fromValues(0, 0, 0);
+    o.up = vec3.fromValues(0, 1, 0);
 
 
     o.RecalculateView = function(){
