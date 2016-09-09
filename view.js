@@ -1,25 +1,28 @@
 
-var PMatrix;
-var VMatrix;
-var PVMatrix;
+var View = (function(){
+    var o = {};
 
-function CalculatePVMatrix(){
-    PMatrix = mat4.create();
-    VMatrix = mat4.create();
-    PVMatrix = mat4.create();
+    o.eye = vec3.create();
+    vec3.set(o.eye, 0, 0, 10);
 
-    mat4.perspective(PMatrix, glMatrix.toRadian(60), canvas.width/canvas.height, .1, 100);
+    o.center = vec3.create();
+    vec3.set(o.center, 0, 0, 0);
 
-    var eye = vec3.create();
-    vec3.set(eye, 0, 0, 10);
+    o.up = vec3.create();
+    vec3.set(o.up, 0, 1, 0);
 
-    var center = vec3.create();
-    vec3.set(center, 0, 0, 0);
 
-    var up = vec3.create();
-    vec3.set(up, 0, 1, 0);
+    o.RecalculateView = function(){
+        this.PMatrix = mat4.create();
+        this.VMatrix = mat4.create();
+        this.PVMatrix = mat4.create();
 
-    mat4.lookAt(VMatrix, eye, center, up);
+        mat4.perspective(this.PMatrix, glMatrix.toRadian(60), canvas.width/canvas.height, .1, 100);
 
-    mat4.multiply(PVMatrix, PMatrix, VMatrix);
-}
+        mat4.lookAt(this.VMatrix, this.eye, this.center, this.up);
+
+        mat4.multiply(this.PVMatrix, this.PMatrix, this.VMatrix);
+    }
+
+    return o;
+})();

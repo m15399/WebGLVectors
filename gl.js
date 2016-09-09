@@ -16,7 +16,7 @@ function FitCanvasToWindow(){
 
     gl.viewport(0, 0, canvas.width, canvas.height);
 
-    CalculatePVMatrix();
+    View.RecalculateView();
 }
 
 (function StartWebGL(){

@@ -10,10 +10,10 @@ Line.Create = (function(){
     proto.scale = null;
 
     var vertices = [
-        1, 1, 0,    1,
-        -1, 1, 0,   0,
-        1, -1, 0,   1,
-        -1, -1, 0,  0
+        .5, .5, 0,    .5,
+        -.5, .5, 0,   0,
+        .5, -.5, 0,   .5,
+        -.5, -.5, 0,  0
     ];
     var vertices32 = new Float32Array(vertices);
 
@@ -38,7 +38,7 @@ Line.Create = (function(){
         gl.vertexAttribPointer(prog.vPosLoc, 3, gl.FLOAT, false, 4 * 4, 0);
         gl.vertexAttribPointer(prog.ProgressLoc, 1, gl.FLOAT, false, 4 * 4, 3 * 4);
 
-        gl.uniformMatrix4fv(prog.PVMatrixLoc, false, PVMatrix);
+        gl.uniformMatrix4fv(prog.PVMatrixLoc, false, View.PVMatrix);
         gl.uniformMatrix4fv(prog.MMatrixLoc, false, MMatrix);
         gl.uniform1f(prog.screenHeightLoc, canvas.height);
 
