@@ -22,11 +22,11 @@ var Shapes = {};
         l.Draw();
     }
 
-    Shapes.Square = function(x, y){
-        Shapes.Line(x-1, y-1, x-1, y+1);
-        Shapes.Line(x-1, y+1, x+1, y+1);
-        Shapes.Line(x+1, y+1, x+1, y-1);
-        Shapes.Line(x+1, y-1, x-1, y-1);
+    Shapes.Square = function(x, y, w, h){
+        Shapes.Line(x-w, y-h, x-w, y+h);
+        Shapes.Line(x-w, y+h, x+w, y+h);
+        Shapes.Line(x+w, y+h, x+w, y-h);
+        Shapes.Line(x+w, y-h, x-w, y-h);
     }
 
 })();

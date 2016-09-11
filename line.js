@@ -13,9 +13,9 @@ var Line = (function(){
     proto.scale = null;
 
     var vertices = [
-        .5, .5, 0,    .5,
+        .5, .5, 0,    1,
         -.5, .5, 0,   0,
-        .5, -.5, 0,   .5,
+        .5, -.5, 0,   1,
         -.5, -.5, 0,  0
     ];
     var vertices32 = new Float32Array(vertices);
@@ -35,6 +35,12 @@ var Line = (function(){
         this.vbo = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
         gl.bufferData(gl.ARRAY_BUFFER, vertices32, gl.STATIC_DRAW);
+    }
+
+    var lineDist = 0;
+
+    _Line.FrameStart = function(){
+        lineDist = 0;
     }
 
     proto.Draw = function(){
@@ -61,11 +67,15 @@ var Line = (function(){
         gl.uniformMatrix4fv(prog.MMatrixLoc, false, MMatrix);
         gl.uniform1f(prog.screenHeightLoc, canvas.height);
 
-        var time = Date.now()/1000.0;
-        time = time - Math.floor(time);
+        var time = performance.now()/1000.0;
+        // time = time - Math.floor(time);
         gl.uniform1f(prog.timeLoc, time);
+        
+        gl.uniform1f(prog.lineDistLoc, lineDist);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+        lineDist++;
     }
 
     return _Line;

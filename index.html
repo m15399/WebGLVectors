@@ -11,11 +11,16 @@
         uniform mat4 PVMatrix;
         uniform mat4 MMatrix;
         uniform float time;
+        uniform float lineDist;
 
         void main(void) {
-            drawTime = (-(time * 6.0) + progress * 1.0);
-            gl_Position = PVMatrix * MMatrix * vec4(vPos, 1.0);
+            float drawSpeed = 6.0; // 6
+            int linesPerRay = 6;
 
+            float progress2 = (progress + lineDist) / float(linesPerRay);
+
+            drawTime = progress2 - (time * drawSpeed);
+            gl_Position = PVMatrix * MMatrix * vec4(vPos, 1.0);
         }
 
     </script>
@@ -27,10 +32,13 @@
         varying float drawTime;
 
         void main(void) {
+            float minBrightness = 0.6;
+            float falloff = .3;
+
             float modTime = drawTime - floor(drawTime);
-            float minus = 1.0 - modTime;
-            float lengthened = 1.0 - pow(minus, .3);
-            float b = clamp(lengthened + .6, 0.0, 1.0);
+            float lengthened = 1.0 - pow((1.0 - modTime), falloff);
+
+            float b = clamp(lengthened + minBrightness, 0.0, 1.0);
             gl_FragColor = vec4(1.0, 1.0, 1.0, b);
         }
 

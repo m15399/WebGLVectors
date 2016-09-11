@@ -9,9 +9,9 @@ var Particle = (function(){
         var o = Object.create(proto);
         o.x = o.y = 0;
 
-        o.life = 1;
+        o.life = 2;
 
-        var v = 10;
+        var v = 5;
         o.xv = v * (Math.random() - .5);
         o.yv = v * (Math.random() - .5);
         return o;
@@ -25,14 +25,14 @@ var Particle = (function(){
     }
 
     proto.Draw = function(){
-        Shapes.Square(this.x, this.y);
+        Shapes.Square(this.x, this.y, .5, .5);
     }
 
     return proto;
 
 })();
 
-var lastTime = performance.now() - 1;
+var lastUpdateTime = performance.now()-1;
 var framesThisSec = 0;
 
 var particles = [];
@@ -42,17 +42,24 @@ function CountFps(){
     framesThisSec = 0;
 }
 
-function Update(timestamp){
-    var dt = (timestamp - lastTime) / 1000.0;
-    lastTime = timestamp;
+function MainLoop(timestamp){
+    var dt = (timestamp - lastUpdateTime) / 1000.0;
+    if(dt > 1.0 / 24){
+        Update(dt);
+        lastUpdateTime = timestamp;
+    }
 
-    ClearGL();
+    Draw();
 
+    framesThisSec++;
+    window.requestAnimationFrame(MainLoop);
+}
+
+function Update(dt){
     particles.push(Particle.Create());
 
     for(var i = 0; i < particles.length; i++){
         particles[i].Update(dt);
-        particles[i].Draw();
 
         if(particles[i].life <= 0){
             var last = particles.pop();
@@ -63,9 +70,19 @@ function Update(timestamp){
         }
     }
 
+}
 
-    framesThisSec++;
-    window.requestAnimationFrame(Update);
+function Draw(){
+    ClearGL();
+    Line.FrameStart();
+
+    for(var i = 0; i < particles.length; i++){
+        // particles[i].Draw();
+    }
+
+    // Shapes.Square(-3, 0, 1, 1);
+    // Shapes.Square(3, 0, 1, 1);
+    Shapes.Square(0, 0, 5, .5);
 }
 
 function main(){
@@ -73,7 +90,7 @@ function main(){
 
     window.setInterval(CountFps, 1000);
 
-    Update(performance.now());
+    MainLoop(performance.now());
 }
 
 (function(){ main(); })();
