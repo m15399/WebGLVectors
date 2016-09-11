@@ -77,7 +77,7 @@ function Draw(){
     Line.FrameStart();
 
     for(var i = 0; i < particles.length; i++){
-        // particles[i].Draw();
+        particles[i].Draw();
     }
 
     // Shapes.Square(-3, 0, 1, 1);

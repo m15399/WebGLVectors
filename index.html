@@ -14,7 +14,7 @@
         uniform float lineDist;
 
         void main(void) {
-            float drawSpeed = 6.0; // 6
+            float drawSpeed = 4.0; // 6
             int linesPerRay = 6;
 
             float progress2 = (progress + lineDist) / float(linesPerRay);
@@ -32,7 +32,7 @@
         varying float drawTime;
 
         void main(void) {
-            float minBrightness = 0.6;
+            float minBrightness = 0.4; // .6
             float falloff = .3;
 
             float modTime = drawTime - floor(drawTime);
@@ -45,6 +45,7 @@
     </script>
 
     <script src="gl-matrix-min.js"></script>
+    <script src="binary.js"></script>
     <script src="view.js"></script>
     <script src="gl.js"></script>
     <script src="shaders.js"></script>
