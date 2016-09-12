@@ -7,13 +7,14 @@ var Particle = (function(){
 
     proto.Create = function(){
         var o = Object.create(proto);
-        o.x = o.y = 0;
+        o.x = 0;
+        o.y = -.5;
 
         o.life = 2;
 
         var v = 5;
         o.xv = v * (Math.random() - .5);
-        o.yv = v * (Math.random() - .5);
+        o.yv = v / 2 * (Math.random() - .5);
         return o;
     }
 
@@ -25,7 +26,8 @@ var Particle = (function(){
     }
 
     proto.Draw = function(){
-        Shapes.Square(this.x, this.y, .5, .5);
+        var size = .3;
+        Shapes.Square(this.x, this.y, size, size);
     }
 
     return proto;
@@ -74,15 +76,30 @@ function Update(dt){
 
 function Draw(){
     ClearGL();
-    Line.FrameStart();
-
-    for(var i = 0; i < particles.length; i++){
-        particles[i].Draw();
-    }
+    Line.ResetBeam();
 
     // Shapes.Square(-3, 0, 1, 1);
     // Shapes.Square(3, 0, 1, 1);
-    Shapes.Square(0, 0, 5, .5);
+    var w = Math.sin(performance.now() / 1000);
+    var h = 1.3;
+    // w = 1;
+    if(Math.random() < .35){
+        Shapes.Square(0, 2, w, h);
+        var d = .03;
+        Shapes.Square(d, 2 + d, w, h);
+    }
+    Line.ResetBeam();
+
+    for(var i = 0; i < particles.length; i++){
+        // Line.ResetBeam();
+        particles[i].Draw();
+    }
+
+    Line.ResetBeam();
+    Shapes.Square(0, -2, 2.4, .5);
+
+
+
 }
 
 function main(){

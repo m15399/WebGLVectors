@@ -66,8 +66,8 @@ function CreateShaderProgram(name){
 
     prog.PVMatrixLoc = gl.getUniformLocation(prog, 'PVMatrix');
     prog.MMatrixLoc = gl.getUniformLocation(prog, 'MMatrix');
-    prog.timeLoc = gl.getUniformLocation(prog, 'time');
-    prog.lineDistLoc = gl.getUniformLocation(prog, 'lineDist');
+    prog.startTimeLoc = gl.getUniformLocation(prog, 'startTime');
+    prog.endTimeLoc = gl.getUniformLocation(prog, 'endTime');
 
     return prog;
 }

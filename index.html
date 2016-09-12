@@ -10,16 +10,12 @@
 
         uniform mat4 PVMatrix;
         uniform mat4 MMatrix;
-        uniform float time;
-        uniform float lineDist;
+
+        uniform float startTime;
+        uniform float endTime;
 
         void main(void) {
-            float drawSpeed = 4.0; // 6
-            int linesPerRay = 6;
-
-            float progress2 = (progress + lineDist) / float(linesPerRay);
-
-            drawTime = progress2 - (time * drawSpeed);
+            drawTime = mix(startTime, endTime, progress);
             gl_Position = PVMatrix * MMatrix * vec4(vPos, 1.0);
         }
 
@@ -27,18 +23,21 @@
 
     <script id="shader-fs" type="x-shader/x-fragment">
 
-        precision highp float;
+        precision lowp float;
 
         varying float drawTime;
 
         void main(void) {
-            float minBrightness = 0.4; // .6
-            float falloff = .3;
+            float maxBrightness = 1.0;
+            float minBrightness = maxBrightness * .37;
+            float tailStrength = 1.0;
 
             float modTime = drawTime - floor(drawTime);
-            float lengthened = 1.0 - pow((1.0 - modTime), falloff);
+            float strengthened = pow(modTime, tailStrength);
 
-            float b = clamp(lengthened + minBrightness, 0.0, 1.0);
+            float frac = 1.0 - strengthened;
+
+            float b = mix(minBrightness, maxBrightness, frac);
             gl_FragColor = vec4(1.0, 1.0, 1.0, b);
         }
 

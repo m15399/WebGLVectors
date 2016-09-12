@@ -19,6 +19,8 @@ function FitCanvasToWindow(){
     View.RecalculateView();
 }
 
+window.onresize = FitCanvasToWindow;
+
 (function StartWebGL(){
     document.body.style.margin = 0;
     document.body.style.border = 0;

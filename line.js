@@ -4,6 +4,8 @@ var Line = (function(){
     var _Line = {};
 
     _Line.lineWidth = .03;
+    _Line.unitsPerLine = 8;
+    _Line.speed = 50; // 6 / 4
 
     var proto = {};
 
@@ -39,8 +41,9 @@ var Line = (function(){
 
     var lineDist = 0;
 
-    _Line.FrameStart = function(){
+    _Line.ResetBeam = function(){
         lineDist = 0;
+        Line.time = performance.now() / 1000.0;
     }
 
     proto.Draw = function(){
@@ -65,17 +68,17 @@ var Line = (function(){
 
         gl.uniformMatrix4fv(prog.PVMatrixLoc, false, View.PVMatrix);
         gl.uniformMatrix4fv(prog.MMatrixLoc, false, MMatrix);
-        gl.uniform1f(prog.screenHeightLoc, canvas.height);
 
-        var time = performance.now()/1000.0;
-        // time = time - Math.floor(time);
-        gl.uniform1f(prog.timeLoc, time);
-        
-        gl.uniform1f(prog.lineDistLoc, lineDist);
+        var lineLen = this.scale[0] / Line.unitsPerLine;
+        var startTime = Line.time * (Line.speed / Line.unitsPerLine) + lineDist;
+        var endTime = startTime - lineLen;
+
+        gl.uniform1f(prog.startTimeLoc, startTime);
+        gl.uniform1f(prog.endTimeLoc, endTime);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        lineDist++;
+        lineDist -= lineLen;
     }
 
     return _Line;
